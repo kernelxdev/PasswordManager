@@ -2,12 +2,16 @@ import json
 import os
 import uuid
 
-# Load existing passwords if any
-try:
+# Check if passwords.json exists and is not empty
+if os.path.exists("passwords.json") and os.stat("passwords.json").st_size != 0:
     with open("passwords.json", "r") as file:
         database = json.load(file)
-except FileNotFoundError:
+else:
     database = {}
+
+def clear_screen():
+    # Clear screen by printing enough newline characters
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 while True:
     print("1. Add new Password")
@@ -16,7 +20,7 @@ while True:
     choice = int(input("What do you want to do?: "))
     
     if choice == 1:
-        os.system("cls")  # For Windows. For Linux, use "clear"
+        clear_screen()
         newpass = input("Enter password: ")
         random_id = str(uuid.uuid4())
         database[random_id] = newpass
@@ -24,7 +28,7 @@ while True:
             json.dump(database, file)
         print("Successfully wrote password")
     elif choice == 2:
-        os.system("cls")  # For Windows. For Linux, use "clear"
+        clear_screen()
         print("Stored Passwords:")
         for key, value in database.items():
             print(f"ID: {key}, Password: {value}")
